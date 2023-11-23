@@ -5,6 +5,14 @@ import TabOne from "./components/TabOne";
 import TabTwo from "./components/TabTwo";
 import { UserProvider } from "./context/CampaignContext";
 import Header from "./components/Header";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
+import Example from "./components/TestReactQuery";
+
+const queryClient = new QueryClient();
 
 function App() {
   const [value, setValue] = useState(0);
@@ -21,27 +29,30 @@ function App() {
   };
 
   return (
-    <UserProvider>
-      <Box sx={{ width: "90%", margin: "24px auto" }}>
-        <Header />
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="THÔNG TIN" {...a11yProps(0)} />
-            <Tab label="CHIẾN DỊCH CON" {...a11yProps(1)} />
-          </Tabs>
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
+        <Box sx={{ width: "90%", margin: "24px auto" }}>
+          <Header />
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+            >
+              <Tab label="THÔNG TIN" {...a11yProps(0)} />
+              <Tab label="CHIẾN DỊCH CON" {...a11yProps(1)} />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <TabOne />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            <TabTwo />
+          </CustomTabPanel>
         </Box>
-        <CustomTabPanel value={value} index={0}>
-          <TabOne />
-        </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}>
-          <TabTwo />
-        </CustomTabPanel>
-      </Box>
-    </UserProvider>
+      </UserProvider>
+      <Example />
+    </QueryClientProvider>
   );
 }
 
